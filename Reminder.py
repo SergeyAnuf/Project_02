@@ -16,7 +16,7 @@ def set():
             minute = int(rem.split(":")[1])
             now = datetime.datetime.now()
             print(now)
-            dt = now.replace(hour=hour, minute=minute)
+            dt = now.replace(hour=hour, minute=minute, second=0)
             print(dt)
             t = dt.timestamp()
             print(t)
