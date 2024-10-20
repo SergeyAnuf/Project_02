@@ -1,16 +1,15 @@
 from tkinter import *
-from tkinter import messagebox as mb
 from tkinter import simpledialog as sd
+from tkinter import messagebox as mb
 import datetime
-import time
 import pygame
+import time
 
-t = 0
-
+t = None
 
 def set():
     global t
-    rem = sd.askstring("Время напоминания", "введите врнмя напоминания в формате ЧЧ:ММ (в 24 часовом формате)")
+    rem = sd.askstring("Время напоминания", "Введите время в формате ЧЧ:ММ (24-часовой формат)")
     if rem:
         try:
             hour = int(rem.split(":")[0])
@@ -21,9 +20,9 @@ def set():
             print(dt)
             t = dt.timestamp()
             print(t)
-        except Exception as e:
-            mb.showinfo("Ошибка", f"Проитзошла ошибка: {e}")
-
+            label.config(text=f"Напоминание установлено на: {hour:02}:{minute:02}")
+        except ValueError:
+            mb.showerror("Ошибка", "Неверный формат времени")
 
 def check():
     global t
@@ -31,21 +30,26 @@ def check():
         now = time.time()
         if now >= t:
             play_snd()
-            t = 0
+            t = None
     window.after(10000, check)
+
 
 
 def play_snd():
     pygame.mixer.init()
-    pygame.mixer.music.load("reminder.mp3")
+    pygame.mixer.music.load("bearwolf-odin-v-pole-voin.mp3")
     pygame.mixer.music.play()
-
 
 window = Tk()
 window.title("Напоминание")
-label = Label(text="Установите напоминание")
+
+label = Label(text="Установите напоминание", font=("Arial", 14))
 label.pack(pady=10)
+
 set_button = Button(text="Установить напоминание", command=set)
-set_button.pack()
+set_button.pack(pady=10)
+
+check()
 
 window.mainloop()
+
